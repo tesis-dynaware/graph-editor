@@ -13,6 +13,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 /**
  * General properties for the graph editor.
@@ -37,7 +38,8 @@ public class GraphEditorProperties {
     public static final double DEFAULT_MAX_HEIGHT = Double.MAX_VALUE;
 
     private static final double DEFAULT_BOUND_VALUE = 15;
-    private static final double DEFAULT_GRID_SPACING = 10;
+    public static final double DEFAULT_GRID_SPACING = 10;
+    public static final Paint DEFAULT_GRID_COLOR = Color.rgb(222, 248, 255);
 
     // Not currently configurable.
     private final boolean northBoundActive = true;
@@ -54,10 +56,10 @@ public class GraphEditorProperties {
     private double westBoundValue = DEFAULT_BOUND_VALUE;
 
     // Off by default.
-    private final BooleanProperty gridVisibleProperty = new SimpleBooleanProperty();
-    private final BooleanProperty snapToGridProperty = new SimpleBooleanProperty();
-    private final DoubleProperty gridSpacingProperty = new SimpleDoubleProperty(DEFAULT_GRID_SPACING);
-    private final ObjectProperty<Color> gridColorProperty = new SimpleObjectProperty<>();
+    private final BooleanProperty gridVisibleProperty = new SimpleBooleanProperty(this, "gridVisible");
+    private final BooleanProperty snapToGridProperty = new SimpleBooleanProperty(this, "snapToGrid");
+    private final DoubleProperty gridSpacingProperty = new SimpleDoubleProperty(this, "gridSpacing", DEFAULT_GRID_SPACING);
+    private final ObjectProperty<Paint> gridColorProperty = new SimpleObjectProperty<>(this, "gridColor", DEFAULT_GRID_COLOR);
 
     private final Map<String, String> customProperties = new HashMap<>();
 
@@ -308,7 +310,7 @@ public class GraphEditorProperties {
      * 
      * @return the grid color, or null if nothing was set
      */
-    public Color getGridColor() {
+    public Paint getGridColor() {
         return gridColorProperty.get();
     }
 
@@ -317,7 +319,7 @@ public class GraphEditorProperties {
      * 
      * @param gridColor the new grid {@link Color}
      */
-    public void setGridColor(final Color gridColor) {
+    public void setGridColor(final Paint gridColor) {
         gridColorProperty.set(gridColor);
     }
 
@@ -326,7 +328,7 @@ public class GraphEditorProperties {
      * 
      * @return the grid color {@link ObjectProperty}
      */
-    public ObjectProperty<Color> gridColorProperty() {
+    public ObjectProperty<Paint> gridColorProperty() {
         return gridColorProperty;
     }
 

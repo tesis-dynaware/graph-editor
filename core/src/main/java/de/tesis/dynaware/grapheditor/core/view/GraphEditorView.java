@@ -59,18 +59,14 @@ public class GraphEditorView extends Region {
      */
     public GraphEditorView() {
 
-        getStylesheets().add(GraphEditorView.class.getResource(STYLESHEET_VIEW).toExternalForm());
-        getStylesheets().add(GraphEditorView.class.getResource(STYLESHEET_DEFAULTS).toExternalForm());
-
+        getStylesheets().addAll(GraphEditorView.class.getResource(STYLESHEET_VIEW).toExternalForm(),
+                GraphEditorView.class.getResource(STYLESHEET_DEFAULTS).toExternalForm());
         getStyleClass().addAll(STYLE_CLASS);
 
         setMaxWidth(GraphEditorProperties.DEFAULT_MAX_WIDTH);
         setMaxHeight(GraphEditorProperties.DEFAULT_MAX_HEIGHT);
 
         initializeLayers();
-        initializeGrid();
-
-        getChildren().add(selectionBox);
     }
 
     /**
@@ -172,15 +168,13 @@ public class GraphEditorView extends Region {
      * @param editorProperties the {@link GraphEditorProperties} instance to be used by the view
      */
     public void setEditorProperties(final GraphEditorProperties editorProperties) {
-
         this.editorProperties = editorProperties;
-
         grid.setProperties(editorProperties);
-        grid.setVisible(editorProperties.isGridVisible());
-
-        editorProperties.gridVisibleProperty().addListener((v, o, n) -> grid.setVisible(n));
-        editorProperties.gridSpacingProperty().addListener((v, o, n) -> grid.draw(getWidth(), getHeight()));
-        editorProperties.gridColorProperty().addListener((v, o, n) -> grid.draw(getWidth(), getHeight()));
+        if (editorProperties != null) {
+            grid.visibleProperty().bind(editorProperties.gridVisibleProperty());
+        } else {
+            grid.visibleProperty().unbind();
+        }
     }
 
     /**
@@ -230,6 +224,7 @@ public class GraphEditorView extends Region {
     protected void layoutChildren() {
         nodeLayer.resizeRelocate(0, 0, getWidth(), getHeight());
         connectionLayer.resizeRelocate(0, 0, getWidth(), getHeight());
+        grid.resizeRelocate(0, 0, getWidth(), getHeight());
     }
 
     /**
@@ -260,20 +255,8 @@ public class GraphEditorView extends Region {
         connectionLayer.minHeightProperty().bind(minHeightProperty());
 
         // Node layer should be on top of connection layer, so we add it second.
-        getChildren().add(connectionLayer);
-        getChildren().add(nodeLayer);
-    }
-
-    /**
-     * Adds a listener to the width and height properties of the view to tell the grid to redraw.
-     */
-    private void initializeGrid() {
-
-        getChildren().add(grid);
-        grid.toBack();
-
-        widthProperty().addListener((v, o, n) -> grid.draw(getWidth(), getHeight()));
-        heightProperty().addListener((v, o, n) -> grid.draw(getWidth(), getHeight()));
+        // Grid layer is on the lowest level so we add it at first
+        getChildren().addAll(grid, connectionLayer, nodeLayer, selectionBox);
     }
 
     /**

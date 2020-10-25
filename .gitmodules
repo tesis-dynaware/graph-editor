@@ -1,0 +1,3 @@
+[submodule "ceca-diagram-core"]
+	path = ceca-diagram-core
+	url = http://gitlab.ii.pw.edu.pl/anadrato/ceca-diagram-core

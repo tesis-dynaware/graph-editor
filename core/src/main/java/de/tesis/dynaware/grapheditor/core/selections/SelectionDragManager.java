@@ -5,6 +5,7 @@ package de.tesis.dynaware.grapheditor.core.selections;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import javafx.beans.value.ChangeListener;
 import javafx.scene.layout.Region;
@@ -274,7 +275,10 @@ public class SelectionDragManager {
                 if (nodeSkin.isSelected() && !nodeSkin.getRoot().equals(master)) {
 
                     final Region slave1 = nodeSkin.getRoot();
-                    slave1.setLayoutX((Double) n + nodeLayoutXOffsets.get(node));
+                    Double offset = nodeLayoutXOffsets.get(node);
+                    if(offset != null) {
+                        slave1.setLayoutX((Double) n + offset);
+                    }
                 }
             }
 
@@ -287,7 +291,10 @@ public class SelectionDragManager {
                     if (jointSkin.isSelected() && !jointSkin.getRoot().equals(master)) {
 
                         final Region slave2 = jointSkin.getRoot();
-                        slave2.setLayoutX((Double) n + jointLayoutXOffsets.get(joint));
+                        Double offset = jointLayoutXOffsets.get(joint);
+                        if(offset != null) {
+                            slave2.setLayoutX((Double) n + offset);
+                        }
                     }
                 }
             }
@@ -302,7 +309,10 @@ public class SelectionDragManager {
                 if (nodeSkin.isSelected() && !nodeSkin.getRoot().equals(master)) {
 
                     final Region slave1 = nodeSkin.getRoot();
-                    slave1.setLayoutY((Double) n + nodeLayoutYOffsets.get(node));
+                    Double offset = nodeLayoutYOffsets.get(node);
+                    if(offset != null) {
+                        slave1.setLayoutY((Double) n + offset);
+                    }
                 }
             }
 
@@ -315,7 +325,10 @@ public class SelectionDragManager {
                     if (jointSkin.isSelected() && !jointSkin.getRoot().equals(master)) {
 
                         final Region slave2 = jointSkin.getRoot();
-                        slave2.setLayoutY((Double) n + jointLayoutYOffsets.get(joint));
+                        Double offset = jointLayoutYOffsets.get(joint);
+                        if(offset != null) {
+                            slave2.setLayoutY((Double) n + offset);
+                        }
                     }
                 }
             }
